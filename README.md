@@ -1,9 +1,6 @@
-**-NotEveryClockIsTheSame-**
-A smart alarm project
+# ***NotEveryClockIsTheSame** - a smart alarm project*
 
-
-
-# What is this documentaion about?
+## What is this documentation about?
 
 This documentation details the realization of a smart alarm, equipped with IoT features.
 In addition to basic operation as clock and alarm, the user has two other possibilities:
@@ -14,10 +11,11 @@ In addition to basic operation as clock and alarm, the user has two other possib
 
 Below is an easy summary outline of screeshots viewable by a user using the product:
 
+<br>
+<img src="https://user-images.githubusercontent.com/108399870/220087728-0e4a8eb1-bb53-4262-890c-56db32b15b78.png" alt="What I can see as User" height="250">
 
 
-
-# Instructions for use
+## Instructions for use
 
 After an inizialization phase, during which the device connects to the network, the time is displayed on the screen. Here you can also see if the alarm clock is enable or not.
 
@@ -37,13 +35,23 @@ When the alarm rings, press *RETURN* button to snooze alarm of 10 minutes, any o
 
 To disable an alarm go to home screen, then press *RETURN* button. You will be asked if you are sure to perform the operation: press *OK* to confirm or *RETURN* to undo.
 
+<br>
 
-# How does the entire project work?
+## Hardware components
+-	MSP432-P401R with its RTC Module
+-	ESP32-WROVER-E with its LILYGO T5 E-paper 4.7 INCH
+-	Buzzer
+-	Buttons
+-	Cables for connection
+
+<br>
+
+## How does the entire project work?
 
 The communication between the two boards via the UART Protocol is what makes the smart alarm work. The MSP serves as the overall command center. It handles time and alarms through its integrated RTC module, and elaborate inputs, transmitting signals to the ESP.
 
-Let's examine the process in detail...
-- 
+### Let's examine the process in detail...
+
 *Inizialization phase*
 
 As seen in the ESP32 `main.c` code, the crucial operations are:
@@ -59,7 +67,7 @@ After a sequence of basic hardware settings, the MSP is currently waiting for da
 As a result, the `CURRENT_STATE` is set to *HOME*.
 
 At this point, the initialization phase concludes with the transmission of the updated data to the ESP, which displays everything on the screen.
-- ----------------------------------------------
+- ---
 *General functioning*
 
 > Note: from this point forward, all the ESP does is receive data from the MSP, show the current status on the screen, and maybe connect to the adequate APIs in the case of weather or transport.
@@ -143,7 +151,7 @@ In terms of software, we've utilized some of the screen's primitives in order to
 Every function we built to enable the GUI's representation of the various states starts with the word *draw_*.
 
 
-# Project development environments
+## Project development environments
 
 We used Code Composer Studio, an IDE designed exclusively for Texas Instruments embedded processors, to create the software that runs on the MSP.
 The introduction of the DriverLib allows us to benefit from a greater level of abstraction when interacting with the hardware.
