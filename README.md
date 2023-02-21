@@ -162,18 +162,28 @@ How does the UART protocol work?
 ---
 This component is both an important and challenging part of the project, and it is made to exchange data as a *vector of 8 bit integers*. 
 It is a master-slave protocol, meaning that the roles of the actors utilizing it are predetermined.
-Also, a parameter that denotes the lenght of the message sent is defined, along with a few constants that indicate control or error codes.
+Also, a parameter that denotes the lenght of the entire message to sent is defined, along with a few constants that indicate control or error codes.
 
 Data processing involves two crucial procedures for sharing information:
-- `void serialize(base * b, volatile int8_t *)` : the data must be serialized before being transferred, and the sending vector must then be correctly established - executed by the master
-- `base * deserialize(int8_t * serialized)` : once the vector containing the serialized data is received, it will be deserialized inside of an appropriate data collection structure that is returned from the function - executed by the slave
+- `void serialize(base * b, volatile int8_t *)` : the data must be serialized before being transferred, and the sending vector must then be put into the send buffer - executed by the master
+- `base * deserialize(int8_t * serialized)` : once the vector containing the serialized data is received, it will be deserialized to an appropriate data structure that is returned from the function - executed by the slave
 
->Note: actually, rather than being 8 bits, the integers provided are 6 bits. This is so that control and error codes can be used only with more bits.
+>Note: actually, rather than being 8 bits, the integers provided are 6 bits. This is the length of the *real* message. Control and error codes uses the remaining combinations. Negative numbers are also ignored as cause of problems on the receiver end.
 
+Many situations are handled by the protocol: 
+- Desyncronization of the sender and the receiver
+- One or many unit of data sent but never received
+- One or many errors occurred during the transfer
+
+>Fun note: Every problem occurred multiple times even on wires that are less than 10 centimeters long.
+
+#### Desyncronization
+
+The protocol is based on **two arrays**, one on the Master (sender) and one on the slave (receiver).
+If everything goes well, the two will be on the *0 index* at the start
 
 
 ---
-
 *CRC mechanism*
 
 
