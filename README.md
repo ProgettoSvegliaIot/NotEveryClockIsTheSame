@@ -88,6 +88,8 @@ ESP
 │   ├── meteo_interface
 │   └── set_interface
 │           └── the multiple interfaces' definition and implementation of the features to display them on the screen
+├── images
+│   └── directory containing all the images used in the project as arrays of uint8_t
 ├── uart
 │   ├── trasport_base
 │   ├── transport_timestamp
