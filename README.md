@@ -66,7 +66,7 @@ MSP
 ├── state_machine
 │   └── definition of the system's overall control flow via FSM, as well as the definition of the interrupts that cause events on the basis of which, depending on the current state, various actions are taken as a result
 ├── main.c
-│   └── definition of the program's flow
+    └── definition of the program's flow
 
 ESP
 ├── api
@@ -96,7 +96,7 @@ ESP
 ├── main.c
 │   └── definition of the program's flow
 └── utils
-│   └── functions of general utility such as manipulating strings and expanding images
+    └── functions of general utility such as manipulating strings and expanding images
 ```
 
 The communication between the two boards via the UART Protocol is what makes the smart alarm work. The MSP serves as the overall command center. It handles time and alarms through its integrated RTC module, and elaborate inputs, transmitting signals to the ESP.
