@@ -47,6 +47,40 @@ To disable an alarm go to home screen, then press *RETURN* button. You will be a
 <br>
 
 ## How does the entire project work?
+```
+MSP
+├── RTC => implementation of module usage features, including customizing the calendar and turning on and off the alarm clock
+├── Time_Management => defines a struct to keep the starting calendar and a function to fill the struct with timestamp conversions
+├── Timer => code to configure the timer, enable and disable it, and managing the buttons whose interrupts activation depend on the timer
+├── transport_base
+├── transport_timestamp
+├── uart_comunication
+├── state_machine
+└── main.c => definition of the program's flow
+ESP
+├── api
+│   └── webConnection
+├── fonts
+│   ├── firasans
+│   ├── roboto_all_small
+│   ├── roboto_all_very_small
+│   ├── roboto_numbers_medium
+│   └── roboto_numbers
+├── gui
+│   ├── alarm_interface
+│   ├── bus_interface
+│   ├── interface_elements
+│   ├── iot_clock
+│   ├── menu_interface
+│   ├── meteo_interface
+│   └── set_interface
+├── uart
+│   ├── trasport-base
+│   ├── transport_timestamp
+│   └── uart_communication
+├── main.c
+└── utils
+```
 
 The communication between the two boards via the UART Protocol is what makes the smart alarm work. The MSP serves as the overall command center. It handles time and alarms through its integrated RTC module, and elaborate inputs, transmitting signals to the ESP.
 
