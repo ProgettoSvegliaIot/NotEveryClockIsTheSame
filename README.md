@@ -47,6 +47,8 @@ To disable an alarm go to home screen, then press *RETURN* button. You will be a
 <br>
 
 ## How does the entire project work?
+
+#### Software structure
 ```
 MSP
 ├── RTC 
@@ -64,7 +66,8 @@ MSP
 ├── state_machine
 │   └── definition of the system's overall control flow via FSM, as well as the definition of the interrupts that cause events on the basis of which, depending on the current state, various actions are taken as a result
 └── main.c
-│   └── definition of the program's flow
+    └── definition of the program's flow
+
 ESP
 ├── api
 │   └── webConnection
