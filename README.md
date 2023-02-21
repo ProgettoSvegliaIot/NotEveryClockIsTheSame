@@ -65,18 +65,20 @@ MSP
 │   └── definition of the UART protocol and its functionalities
 ├── state_machine
 │   └── definition of the system's overall control flow via FSM, as well as the definition of the interrupts that cause events on the basis of which, depending on the current state, various actions are taken as a result
-└── main.c
-    └── definition of the program's flow
+├── main.c
+│   └── definition of the program's flow
 
 ESP
 ├── api
 │   └── webConnection
+│           └── it describes the procedures for connecting to different APIs and interpreting the incoming data, making it a crucial file for Internet connections
 ├── fonts
 │   ├── firasans
 │   ├── roboto_all_small
 │   ├── roboto_all_very_small
 │   ├── roboto_numbers_medium
 │   └── roboto_numbers
+│           └── font used for writing on the screen
 ├── gui
 │   ├── alarm_interface
 │   ├── bus_interface
@@ -85,12 +87,16 @@ ESP
 │   ├── menu_interface
 │   ├── meteo_interface
 │   └── set_interface
+│           └── the multiple interfaces' definition and implementation of the features to display them on the screen
 ├── uart
-│   ├── trasport-base
+│   ├── trasport_base
 │   ├── transport_timestamp
 │   └── uart_communication
+│           └── files that correspond to those specified in the MSP for managing the UART protocol
 ├── main.c
+│   └── definition of the program's flow
 └── utils
+│   └── functions of general utility such as manipulating strings and expanding images
 ```
 
 The communication between the two boards via the UART Protocol is what makes the smart alarm work. The MSP serves as the overall command center. It handles time and alarms through its integrated RTC module, and elaborate inputs, transmitting signals to the ESP.
