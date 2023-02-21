@@ -170,33 +170,69 @@ Data processing involves two crucial procedures for sharing information:
 
 >Note: actually, rather than being 8 bits, the integers provided are 6 bits. This is the length of the *real* message. Control and error codes uses the remaining combinations. Negative numbers are also ignored as cause of problems on the receiver end.
 
-Many situations are handled by the protocol: 
+A sample comunication works like this:
+
+<img src='https://user-images.githubusercontent.com/47862158/220392502-2303ff63-4dc8-48ed-abda-2cec214a6958.png' style='width: 30%; margin: 0 auto; display: block;' />
+
+
+## Error situations handled by the protocol 
 - Desyncronization of the sender and the receiver
 - One or many unit of data sent but never received
-- One or many errors occurred during the transfer
+- The received data is incorrect
 
 >Fun note: Every problem occurred multiple times even on wires that are less than 10 centimeters long.
 
-#### Desyncronization
+### Desyncronization of the sender and the receiver
 
 The protocol is based on **two arrays**, one on the Master (sender) and one on the slave (receiver).
-If everything goes well, the two will be on the *0 index* at the start
+If everything goes well, the two will be on the same *0 index* at the beginning
 
+![image](https://user-images.githubusercontent.com/47862158/220388059-8b21cc91-a3a0-43b2-9fd6-f639536d78a9.png)
 
----
-*CRC mechanism*
+IF that's not the case, the situation will be, for example:
+![image](https://user-images.githubusercontent.com/47862158/220393311-6847e01a-76c9-4782-aec9-2837eb25fc49.png)
 
+When a value is received on the Slave end, the array index on which the value was saved is returned to the Master.
+So it's easy to know when the desynchronization happends.
+The master will send a `ERROR_NUM`, so that the slave can move it's index in the *0 position*, responding with a `ERROR_ACK`.
+When this value is received on the Master end, it will start again sending the data from the beginning.
 
+![image](https://user-images.githubusercontent.com/47862158/220393707-e7d5c4bb-cceb-471b-8639-1050f8d867f1.png)
 
-To better understand the message exchange between master and slave, refer to a few simple diagrams:
+The beginning situation has so been restored successfully on both ends.
 
----
+### One or many unit of data sent but never received
 
+This is done by implementing a Timeout strategy.
+The timeout is calculated as a fixed `~3x` the time it normally takes to receive a response after sending the data.
+It is done always on the Master end, that will send again the same data when the timeout occurs.
 
+### The received data is incorrect
 
+This is resolved using a 3-way handshake with a "*CRC*" check. 
+The CRC value is requested from the Master and calculated on both ends. The slave will then send it's value, that is checked by the master, that will:
+- Accept it, sending an *ACK* . If it's the same as the one Master calculated. 
+- Refuse it, sending an *ERROR_NUM*. The flow continues as described earlier in the *Desyncronization* section, essentially starting over.
 
-Spiegare un attimo il  discorso delle interrupt uart
+It is common knowledge between the two ends of **when** the handshake should begin.
+If the master requests the CRC too early, it's the Slave who responds with a *ERROR_ACK*.
+The handing is the usual, both the cards will reset their indexes to 0 and start over.
 
+But how it's the CRC calulated?
+
+Two constant values are needed: *CRC_START* and *CRC_SIZE*, that are known in advance by both cards.
+The sum of all the received values is used to calculate it:
+
+`CRC_START - ( sum(recv_buf) % CRC_SIZE )`
+
+With the CRC_START set as 121 and CRC_SIZE as 55, the values between 66 and 121 are *used* / *reserved* for CRC, leaving the values from 0 to *actually* 65 for the user data. 6 bits are used for convenience
+
+### Protocol implementation
+
+The biggest challenge implementing has been figuring out that the right way to do it was to use polling instead of an interrupt-based approach.
+To do that we used a `global volatile` variable to costantly check whenever a new value was received by UART.
+
+The rest is just a switch that works based on the value received.
  
 
 How does the e-Ink screen work?
