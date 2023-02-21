@@ -49,14 +49,22 @@ To disable an alarm go to home screen, then press *RETURN* button. You will be a
 ## How does the entire project work?
 ```
 MSP
-├── RTC => implementation of module usage features, including customizing the calendar and turning on and off the alarm clock
-├── Time_Management => defines a struct to keep the starting calendar and a function to fill the struct with timestamp conversions
-├── Timer => code to configure the timer, enable and disable it, and managing the buttons whose interrupts activation depend on the timer
+├── RTC 
+│   └── implementation of module usage features, including customizing the calendar and turning on and off the alarm clock
+├── Time_Management
+│   └── defines a struct to keep the starting calendar and a function to fill the struct with timestamp conversions
+├── Timer
+│   └── code to configure the timer, enable and disable it, and managing the buttons whose interrupts activation depend on the timer
 ├── transport_base
+│   └── functions for serializing and deserializing data before transmission and after reception using the UART protocol
 ├── transport_timestamp
+│   └── functions for serializing and deserializating timestamp
 ├── uart_comunication
+│   └── definition of the UART protocol and its functionalities
 ├── state_machine
-└── main.c => definition of the program's flow
+│   └── definition of the system's overall control flow via FSM, as well as the definition of the interrupts that cause events on the basis of which, depending on the current state, various actions are taken as a result
+└── main.c
+│   └── definition of the program's flow
 ESP
 ├── api
 │   └── webConnection
