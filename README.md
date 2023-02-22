@@ -200,7 +200,7 @@ So it's easy to know when the desynchronization happends.
 The master will send a `ERROR_NUM`, so that the slave can move it's index in the *0 position*, responding with a `ERROR_ACK`.
 When this value is received on the Master end, it will start again sending the data from the beginning.
 
-![image](https://user-images.githubusercontent.com/47862158/220393707-e7d5c4bb-cceb-471b-8639-1050f8d867f1.png)
+<img src='https://user-images.githubusercontent.com/47862158/220393707-e7d5c4bb-cceb-471b-8639-1050f8d867f1.png' width='200' />
 
 The beginning situation has so been restored successfully on both ends.
 
