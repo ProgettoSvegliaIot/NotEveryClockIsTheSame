@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "*.html": "html",
+        "*.tera": "html",
+        "*.hcc": "cpp"
+    }
+}

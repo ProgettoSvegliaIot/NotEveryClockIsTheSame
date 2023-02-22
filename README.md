@@ -258,15 +258,15 @@ Every function we built to enable the GUI's representation of the various states
 ## Project development environments
 
 We used Code Composer Studio, an IDE designed exclusively for Texas Instruments embedded processors, to create the software that runs on the MSP.
-In order to load the project into the board, just import the code into the IDE (making sure the folder name is *ProgettoSvegliaMSP* to import it correctly)
+In order to load the project into the board, just import the *ProgettoSvegliaMSP* folder into the IDE.
 
 The DriverLib allows us to benefit from a greater level of abstraction when interacting with the hardware, so it's also needed to import it into the project.
 
-The code that runs on the ESP, on the other hand, was developed using ![PlatformIO](https://platformio.org/), that basically enabled us to use the Arduino IDE inside Visual Studio Code.
+The code that runs on the ESP32, on the other hand, was developed using [PlatformIO](https://platformio.org/), that basically enabled us to use the Arduino IDE inside Visual Studio Code.
 To load the code is needed to open the folder as a project, and just click on the build button, to use the default configuration.
 
 The internet connection to the following APIs provides the information required to get the timestamp, weather, and arriving buses:
 
-- timestamp - ![ntppool.org](https://www.ntppool.org/it/)
-- weather - ![openweathermap.org](https://openweathermap.org/)
-- buses - ![traquantopassa.in](https://github.com/matteocontrini/traquantopassa)
+- timestamp - [ntppool.org](https://www.ntppool.org/it/)
+- weather - [openweathermap.org](https://openweathermap.org/)
+- buses - [traquantopassa.in](https://github.com/matteocontrini/traquantopassa)

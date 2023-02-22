@@ -1,0 +1,7 @@
+.vscode
+.pio
+schematic/
+examples/
+datasheet/
+3D_file/
+Waveform_header/
