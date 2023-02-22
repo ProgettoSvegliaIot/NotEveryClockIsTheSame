@@ -1,4 +1,4 @@
-# ***NotEveryClockIsTheSame** - a smart alarm project*
+# **NotEveryClockIsTheSame** - *a smart alarm project*
 
 ## What is this documentation about?
 
@@ -13,7 +13,6 @@ Below is an easy summary outline of screeshots viewable by a user using the prod
 
 <br>
 <img src="https://user-images.githubusercontent.com/108399870/220087728-0e4a8eb1-bb53-4262-890c-56db32b15b78.png" alt="What I can see as User" height="250">
-
 
 ## Instructions for use
 
@@ -35,20 +34,22 @@ When the alarm rings, press *RETURN* button to snooze alarm of 10 minutes, any o
 
 To disable an alarm go to home screen, then press *RETURN* button. You will be asked if you are sure to perform the operation: press *OK* to confirm or *RETURN* to undo.
 
-<br>
+<br />
 
 ## Hardware components
+
 -	MSP432-P401R with its RTC Module
 -	ESP32-WROVER-E with its LILYGO T5 E-paper 4.7 INCH
 -	Buzzer
 -	Buttons
 -	Cables for connection
 
-<br>
+<br />
 
 ## How does the entire project work?
 
 #### Software structure
+
 ```
 MSP
 ├── RTC 
@@ -131,6 +132,7 @@ At this point, the initialization phase concludes with the transmission of the u
 The MSP, which was already defined as the primary control point, sends data to the ESP whenever a user pushes a button. The communication starts each time the minute, the current status, the alarm clock's enable status, or the time for which it has to be set changes.
 
 The following two functions - which are part of the UART protocol - are involved in the information exchange:
+
 - `Uart_Communicate(base * to_send)` : used by the MSP to transmit data each time an update occurs
 - `uart_receive(uint8_t*  recv, size_t, uint8_t*  act_recv)` : ESP's method of receiving
 
@@ -141,7 +143,7 @@ The state machine definition, which can be seen in the code of the files `state 
 
 Let's now focus on the management of interrupts, which define the event generated and the device's subsequent behavior:
 
->Note: this handlers are defined and implemented in MSP code 
+>Note: this handlers are defined and implemented in MSP code
 
 <br> `void RtcIsrHandler(void)`
 The RTC's interruptions take place:
@@ -156,8 +158,6 @@ The RTC's interruptions take place:
 This is the buttons handler, which, generates the respective event based on the button that the user presses.
 As you can see in the function code, here, there is a particularity: in order to prevent unintended state changes, a 1 second timer in compare mode is employed to temporarily disable the buttons interrupts. This decision was made to give the electrical signal time to stabilize. It functions like a debouncer.
 
-
-
 How does the UART protocol work?
 ---
 This component is both an important and challenging part of the project, and it is made to exchange data as a *vector of 8 bit integers*. 
@@ -165,6 +165,7 @@ It is a master-slave protocol, meaning that the roles of the actors utilizing it
 Also, a parameter that denotes the lenght of the entire message to sent is defined, along with a few constants that indicate control or error codes.
 
 Data processing involves two crucial procedures for sharing information:
+
 - `void serialize(base * b, volatile int8_t *)` : the data must be serialized before being transferred, and the sending vector must then be put into the send buffer - executed by the master
 - `base * deserialize(int8_t * serialized)` : once the vector containing the serialized data is received, it will be deserialized to an appropriate data structure that is returned from the function - executed by the slave
 
@@ -174,8 +175,8 @@ A sample comunication works like this:
 
 <img src='https://user-images.githubusercontent.com/47862158/220392502-2303ff63-4dc8-48ed-abda-2cec214a6958.png' style='width: 30%; margin: 0 auto; display: block;' />
 
-
 ## Error situations handled by the protocol 
+
 - Desyncronization of the sender and the receiver
 - One or many unit of data sent but never received
 - The received data is incorrect
@@ -211,6 +212,7 @@ It is done always on the Master end, that will send again the same data when the
 
 This is resolved using a 3-way handshake with a "*CRC*" check. 
 The CRC value is requested from the Master and calculated on both ends. The slave will then send it's value, that is checked by the master, that will:
+
 - Accept it, sending an *ACK* . If it's the same as the one Master calculated. 
 - Refuse it, sending an *ERROR_NUM*. The flow continues as described earlier in the *Desyncronization* section, essentially starting over.
 
@@ -233,16 +235,17 @@ The biggest challenge implementing has been figuring out that the right way to d
 To do that we used a `global volatile` variable to costantly check whenever a new value was received by UART.
 
 The rest is just a switch that works based on the value received.
- 
 
 How does the e-Ink screen work?
 ---
+
 This technology simulates the appearance of ink on a piece of paper, the fact that electrophoresis is utilized here sets them apart from LCD panels, which use a back light to illuminate the pixels and display the image. This kind of screen is internally composed of tiny electrically charged spheres, each of which is separated into two hemispheres: the black hemisphere is positively charged, and the white one is negatively charged. The spheres can be oriented to create the desired image by taking advantage of the electric fields.
 In terms of software, we've utilized some of the screen's primitives in order to make use of its capabilities, here some examples:
 
 - `writeln` : to type text into the screen
+
 > Note: choosing the appropriate font type before beginning to write a text is necessary.
-> We developed Pyhton scripts to generate the appropriate fonts for our purposes.
+> We developed Python scripts to generate the appropriate fonts for our purposes.
 
 - `write_mode` : used in our case to remove some elements; the term *white on white* describes our technique in which an element is covered by printing it on the screen in white
 
@@ -252,16 +255,18 @@ In terms of software, we've utilized some of the screen's primitives in order to
 
 Every function we built to enable the GUI's representation of the various states starts with the word *draw_*.
 
-
 ## Project development environments
 
 We used Code Composer Studio, an IDE designed exclusively for Texas Instruments embedded processors, to create the software that runs on the MSP.
-The introduction of the DriverLib allows us to benefit from a greater level of abstraction when interacting with the hardware.
+In order to load the project into the board, just import the code into the IDE (making sure the folder name is *ProgettoSvegliaMSP* to import it correctly)
 
-The code that runs on the ESP, on the other hand, was developed using PlatformIO:  https://platformio.org/
+The DriverLib allows us to benefit from a greater level of abstraction when interacting with the hardware, so it's also needed to import it into the project.
+
+The code that runs on the ESP, on the other hand, was developed using ![PlatformIO](https://platformio.org/), that basically enabled us to use the Arduino IDE inside Visual Studio Code.
+To load the code is needed to open the folder as a project, and just click on the build button, to use the default configuration.
 
 The internet connection to the following APIs provides the information required to get the timestamp, weather, and arriving buses:
-- timestamp - https://www.ntppool.org/it/
-- weather - https://openweathermap.org/
-- buses - https://github.com/matteocontrini/traquantopassa
 
+- timestamp - ![ntppool.org](https://www.ntppool.org/it/)
+- weather - ![openweathermap.org](https://openweathermap.org/)
+- buses - ![traquantopassa.in](https://github.com/matteocontrini/traquantopassa)
