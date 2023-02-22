@@ -1,5 +1,7 @@
 # **NotEveryClockIsTheSame** - *a smart alarm project*
 
+[Youtube Video - Trailer](https://youtu.be/v_QtYMqMTdM)
+
 ## What is this documentation about?
 
 This documentation details the realization of a smart alarm, equipped with IoT features.
